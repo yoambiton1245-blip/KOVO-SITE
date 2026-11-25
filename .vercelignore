@@ -1,0 +1,7 @@
+# Netlify-only files: kept in the repo while the old Netlify site still runs, not needed on Vercel
+netlify/
+netlify.toml
+public/_headers
+public/_redirects
+test/
+tools/

@@ -71,7 +71,7 @@ export function initGallery({ lightbox, reduceMotion }) {
 
   const load = async () => {
     try {
-      if (SITE.hosting === "netlify") throw new Error("no gallery API on static hosting");
+      if (SITE.hosting !== "server") throw new Error("no gallery API on static hosting");
       const { data } = await api.getProjects();
       items = Array.isArray(data) ? data : [];
     } catch {

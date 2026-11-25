@@ -16,6 +16,15 @@ export const SITE = Object.freeze({
    *  "server"  (default) – Node/Express backend: leads, admin, analytics, saved designs.
    *  "netlify" – static hosting + Netlify Functions: the contact form uses Netlify Forms,
    *              saved designs use a Netlify Function, self-hosted analytics and the gallery API are off.
+   *  "vercel"  – static hosting + Vercel Functions (api/): the contact form posts to /api/leads (email),
+   *              saved designs use /api/designs, self-hosted analytics and the gallery API are off.
+   * With "vercel" in the meta tag, a copy still served from *.netlify.app keeps using Netlify Forms,
+   * so both hosts work during the move.
    */
-  hosting: document.querySelector('meta[name="kovo-hosting"]')?.content === "netlify" ? "netlify" : "server"
+  hosting: resolveHosting(document.querySelector('meta[name="kovo-hosting"]')?.content)
 });
+
+function resolveHosting(meta) {
+  if (meta === "vercel") return location.hostname.endsWith(".netlify.app") ? "netlify" : "vercel";
+  return meta === "netlify" ? "netlify" : "server";
+}

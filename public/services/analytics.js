@@ -10,7 +10,7 @@
  */
 import { SITE } from "../config/site.config.js";
 
-const optedOut = SITE.hosting === "netlify" || navigator.doNotTrack === "1" || window.doNotTrack === "1" || navigator.globalPrivacyControl === true;
+const optedOut = SITE.hosting !== "server" || navigator.doNotTrack === "1" || window.doNotTrack === "1" || navigator.globalPrivacyControl === true;
 const queue = [];
 let timer = null;
 

@@ -160,10 +160,8 @@ body::before {
 
 .brand { display: inline-flex; align-items: center; gap: .7rem; color: var(--logo); }
 .brand-mark { width: 30px; height: 30px; fill: currentColor; flex: none; }
-/* On dark backgrounds (header over the video, footer, open mobile menu) the burgundy logo sits on a cream tile */
-.site-header:not(.is-scrolled) .brand, .menu-open .site-header .brand, .footer-brand .brand {
-  background: var(--cream); padding: .5rem .85rem .5rem .7rem; border-radius: 3px;
-}
+/* On dark backgrounds (header over the video, footer, open mobile menu) the logo sits directly on the background, in cream */
+.site-header:not(.is-scrolled) .brand, .menu-open .site-header .brand, .footer-brand .brand { color: var(--cream); }
 .brand-word { font-family: var(--f-display); font-size: 1.5rem; font-weight: 500; letter-spacing: .32em; direction: ltr; padding-inline-start: .32em; }
 
 .main-nav { display: flex; align-items: center; gap: 2.25rem; }
@@ -505,7 +503,6 @@ body::before {
 /* ---------- Footer ---------- */
 .site-footer { background: var(--ink); color: rgba(246, 240, 231, .78); padding-top: clamp(3.5rem, 3rem + 3vw, 6rem); padding-bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)); font-size: var(--fs-sm); }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2.5rem; }
-.footer-brand .brand { color: var(--logo); }
 .footer-brand p { margin-top: 1.25rem; max-width: 26rem; line-height: 1.7; }
 .site-footer h3 { font-family: var(--f-body); font-size: var(--fs-xs); font-weight: 600; letter-spacing: .14em; color: var(--wood-light); margin-bottom: 1rem; }
 .site-footer ul { display: grid; gap: .55rem; }
@@ -664,7 +661,7 @@ body::before {
 /* ---------- 404 ---------- */
 .page-404 { background: var(--bordeaux-deep); color: var(--cream); }
 .nf { min-height: 100svh; display: flex; flex-direction: column; justify-content: center; gap: 1.25rem; max-width: 46rem; margin-inline: auto; padding: calc(2rem + env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) calc(2rem + env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px)); }
-.nf-brand { width: fit-content; color: var(--logo); background: var(--cream); padding: .5rem .85rem .5rem .7rem; border-radius: 3px; margin-bottom: 2rem; }
+.nf-brand { width: fit-content; color: var(--cream); margin-bottom: 2rem; }
 .nf-code { font-family: var(--f-display); font-size: clamp(5rem, 3rem + 10vw, 10rem); line-height: 1; color: var(--wood-light); font-weight: 300; }
 .nf-title { font-size: var(--fs-2xl); }
 .nf-text { font-size: var(--fs-lg); color: rgba(246, 240, 231, .82); max-width: 36rem; }

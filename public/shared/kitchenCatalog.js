@@ -64,7 +64,7 @@ export const CATEGORIES = Object.freeze({
     hasFinish: false,
     finish: "gloss",
     options: [
-      { id: "original", label: "שחור (כמו בתמונה)", original: true },
+      { id: "original", label: "כמו בתמונה", original: true },
       { id: "brass", label: "פליז מוברש", color: "#B9914F", texture: "brushed", strength: 0.4, scale: 3 },
       { id: "steel", label: "נירוסטה", color: "#BFC1C2", texture: "brushed", strength: 0.4, scale: 3 },
       { id: "copper", label: "נחושת", color: "#B4704F", texture: "brushed", strength: 0.4, scale: 3 },
@@ -77,7 +77,7 @@ export const CATEGORIES = Object.freeze({
     hasFinish: false,
     finish: "satin",
     options: [
-      { id: "original", label: "שיש כמו בתמונה", original: true },
+      { id: "original", label: "כמו בתמונה", original: true },
       { id: "subway-white", label: "אריחי סאבווי לבנים", color: "#ECE8E0", texture: "subway", strength: 0.9, scale: 1.6 },
       { id: "zellige-green", label: "זליג׳ ירוק", color: "#5C7A65", texture: "zellige", strength: 0.9, scale: 1.4 },
       { id: "zellige-white", label: "זליג׳ לבן", color: "#E7E0D3", texture: "zellige", strength: 0.8, scale: 1.4 },

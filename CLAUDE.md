@@ -24,7 +24,22 @@ and when he must click something, give one step at a time.
 ## Fixed facts – do not change without the owner asking
 - WhatsApp: https://wa.me/972555035890 · Phone (calls): 054-977-8853 · Instagram: https://www.instagram.com/kovo.kitchen/ · Leads email: Kovo.kitchen@gmail.com
 - Hero headline, "הסיפור שלנו" and the three testimonials are the owner's exact text – keep verbatim.
-- Logo: burgundy K mark `#630209` (sprite `#i-kovo` in index.html); the word KOVO is burgundy.
+- Logo: burgundy K mark `#630209` (sprite `#i-kovo` in index.html) on light grounds, cream on dark grounds, never on a tile.
 - Gallery photos are stock inspiration images, labeled as such until real KOVO photos arrive.
 - Don't change the overall design, colours, typography or menu unless asked. Keep accessibility and the strict CSP (no inline scripts/styles).
+
+## Design language (redesign, Nov 2026)
+- Minimal editorial / architecture-studio feel. Neutrals only: paper `#F7F4EF`, sand `#EEE8DF`, stone, ink `#1B1916`. Burgundy appears only in the logo.
+- Frank Ruhl Libre (light weights) for display, Assistant for body. Hairlines instead of boxes and cards, generous white space.
+- One primary call to action per area. Section labels "01 —— name". Gentle fade-in only, no flashy effects.
+- Home order: hero (video) → statement → projects → designer → story → process → testimonials → contact → footer.
+- Gallery layout comes from `size` in `config/projects.fallback.js` (feature / wide / tall / half / small); the first 8 show, the rest behind "לכל הפרויקטים".
+- Text over the hero video must keep AA contrast on the brightest frames; re-measure if the shade or hero text changes.
+
+## Kitchen designer
+- Photo: `public/assets/designer/kitchen-walnut-island.webp` (1200x800, the owner's photo). Areas are PNG masks in `assets/designer/masks/` (outline + colour rules, so stools, faucet, lamp and counter objects are never repainted).
+- Only areas the photo has are offered (`kitchen.areas`); this kitchen is handle-less, so no "handles" tab.
+- A new kitchen id must also go into `KITCHEN_IDS` in `lib/design.validator.js` (a test checks this).
+- `shared/` and `public/shared/` must be identical (browser loads `public/shared`); a test checks this.
+- Mobile: the preview is pinned (sticky) and kept small; the before/after button must not use `touch-action: none` (it blocked page scrolling).
 - Secrets only in Vercel Environment Variables, never in the repo.

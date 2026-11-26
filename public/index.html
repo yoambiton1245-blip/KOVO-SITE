@@ -71,7 +71,7 @@
 </svg>
 <a class="skip-link" href="#main">דילוג לתוכן הראשי</a>
 
-<!-- ============ HEADER / NAV ============ -->
+<!-- ============ HEADER ============ -->
 <header class="site-header" id="siteHeader">
   <div class="header-inner">
     <a class="brand" href="#top" aria-label="KOVO – חזרה לראש העמוד">
@@ -81,17 +81,15 @@
 
     <nav class="main-nav" id="mainNav" aria-label="ניווט ראשי">
       <ul>
-        <li><a href="#top">בית</a></li>
-        <li><a href="#kitchens">מטבחים</a></li>
-        <li><a href="#projects">הפרויקטים שלנו</a></li>
-        <li><a href="#design">עצב את המטבח</a></li>
-        <li><a href="#about">הסיפור שלנו</a></li>
+        <li><a href="#projects">פרויקטים</a></li>
+        <li><a href="#design">עצבו מטבח</a></li>
+        <li><a href="#about">הסיפור</a></li>
         <li><a href="#contact">צור קשר</a></li>
       </ul>
-      <a class="btn btn-solid nav-cta" href="#contact">לתיאום פגישה</a>
-      <div class="nav-social">
-        <a href="https://www.instagram.com/kovo.kitchen/" target="_blank" rel="noopener noreferrer" aria-label="KOVO באינסטגרם" data-instagram><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"></use></svg></a>
-        <a href="https://wa.me/972555035890" target="_blank" rel="noopener noreferrer" aria-label="וואטסאפ" data-whatsapp><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-whatsapp"></use></svg></a>
+      <div class="nav-contact">
+        <a href="tel:+972549778853" dir="ltr">054-977-8853</a>
+        <a href="https://wa.me/972555035890" target="_blank" rel="noopener noreferrer" data-whatsapp>וואטסאפ</a>
+        <a href="https://www.instagram.com/kovo.kitchen/" target="_blank" rel="noopener noreferrer" data-instagram>אינסטגרם</a>
       </div>
     </nav>
 
@@ -103,14 +101,11 @@
 
 <main id="main">
 
-<!-- ============ HERO (background video) ============ -->
+<!-- ============ HERO ============ -->
 <section class="hero" id="top" aria-label="פתיחה">
   <!--
-    HERO VIDEO SLOT
-    ---------------
-    hero-desktop.mp4 = the KOVO vertical reel framed on a dark blurred background (16:9).
-    hero-mobile.mp4  = the original vertical reel, used up to 900px wide.
-    Both: muted, no audio track, Instagram end card trimmed. See README.md to replace.
+    hero-desktop.mp4 = the KOVO reel framed for wide screens (16:9).
+    hero-mobile.mp4  = the original vertical reel, used up to 900px wide. Both muted, no audio track.
   -->
   <div class="hero-media">
     <video class="hero-video" id="heroVideo"
@@ -125,110 +120,34 @@
   </div>
 
   <div class="hero-content wrap">
-    <p class="eyebrow eyebrow-light">מטבחים בהתאמה אישית — קצרין ורמת הגולן</p>
+    <p class="hero-kicker">מטבחים בהתאמה אישית · קצרין ורמת הגולן</p>
     <h1 class="hero-title">
       <span class="line">מטבחים שנולדו מתשוקה,</span>
       <span class="line">עוצבו בדיוק, ונבנו עבורכם.</span>
     </h1>
-    <p class="hero-sub">מטבחים בהתאמה אישית, מהשרטוט הראשון ועד ההתקנה. תכנון מדויק, חומרי גלם איכותיים ומטבח שנועד להחזיק לאורך שנים.</p>
-    <div class="hero-actions">
-      <a class="btn btn-light" href="#contact">בואו לתכנן את המטבח שלכם</a>
-      <a class="btn btn-ghost-light" href="#projects">הפרויקטים שלנו</a>
-    </div>
+    <p class="hero-sub">תכנון מדויק, חומרי גלם איכותיים ומטבח שנועד להחזיק לאורך שנים.</p>
+    <a class="btn btn-light hero-cta" href="#contact" data-track="cta_click" data-track-label="hero">לתיאום פגישה</a>
   </div>
 
-  <a class="scroll-cue" href="#intro" aria-label="גלילה לתוכן"><span></span></a>
   <button type="button" class="hero-pause" id="heroPause" aria-pressed="false" aria-label="עצירת סרטון הרקע" hidden>
     <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
     <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
   </button>
 </section>
 
-<!-- ============ INTRO STRIP ============ -->
-<section class="intro" id="intro">
-  <div class="wrap intro-grid">
-    <p class="intro-lead reveal">סטודיו למטבחים בקצרין. אנחנו מתכננים, מייצרים ומתקינים כל מטבח בעצמנו, מהשרטוט הראשון ועד הידית האחרונה.</p>
-    <ul class="intro-facts reveal" aria-label="במספרים">
-      <li><span class="fact-num">1:1</span><span class="fact-label">תכנון לפי מידות החלל, לא לפי קטלוג</span></li>
-      <li><span class="fact-num">קצרין</span><span class="fact-label">ומשם לכל רמת הגולן והסביבה</span></li>
-    </ul>
-  </div>
-</section>
-
-<!-- ============ CATEGORIES ============ -->
-<section class="section categories" id="kitchens" aria-labelledby="catTitle">
+<!-- ============ STATEMENT ============ -->
+<section class="statement" id="intro" aria-label="על הסטודיו">
   <div class="wrap">
-    <header class="section-head reveal">
-      <p class="eyebrow">סגנונות מטבח</p>
-      <h2 id="catTitle" class="section-title">המטבח שמתאים לבית שלכם</h2>
-      <p class="section-intro">כל מטבח מתוכנן לחלל שבו הוא יעמוד ולאנשים שיבשלו בו כל יום.</p>
-    </header>
-
-    <div class="cat-grid">
-      <article class="cat-card cat-feature reveal">
-        <a href="#projects" data-filter-link="modern">
-          <div class="cat-img"><img src="assets/img/kitchen-walnut-marble.webp" alt="מטבח ישר עם ארונות עץ אגוז כהה וחיפוי שיש לבן עם עורקים" loading="lazy" width="1600" height="1067"></div>
-          <div class="cat-body">
-            <h3>מטבחים מודרניים ויוקרתיים</h3>
-            <p>קווים נקיים, משטחי אבן, תאורה משולבת ופרזול שנסגר בשקט.</p>
-            <span class="link-arrow">למטבחים מודרניים</span>
-          </div>
-        </a>
-      </article>
-
-      <article class="cat-card reveal">
-        <a href="#projects" data-filter-link="light">
-          <div class="cat-img"><img src="assets/img/kitchen-white-walnut.webp" alt="מטבח עם ארונות עליונים לבנים וארונות תחתונים מעץ כהה" loading="lazy" width="1000" height="1250"></div>
-          <div class="cat-body">
-            <h3>מטבחים בהירים ומינימליסטיים</h3>
-            <p>אלון בהיר, גוונים רכים ומטבח שמרגיש מרווח גם בחלל קטן.</p>
-            <span class="link-arrow">למטבחים בהירים</span>
-          </div>
-        </a>
-      </article>
-
-      <article class="cat-card reveal">
-        <a href="#projects" data-filter-link="storage">
-          <div class="cat-img"><img src="assets/img/kitchen-drawer-storage.webp" alt="מגירה פנימית מעץ אלון נפתחת מתוך אי מטבח לבן" loading="lazy" width="1000" height="1500"></div>
-          <div class="cat-body">
-            <h3>מזווה ופתרונות אחסון</h3>
-            <p>ארונות גבוהים, מגירות פנימיות ומערכות ארגון שמנצלות כל סנטימטר.</p>
-            <span class="link-arrow">לפתרונות אחסון</span>
-          </div>
-        </a>
-      </article>
-
-      <article class="cat-card reveal">
-        <a href="#projects" data-filter-link="wood">
-          <div class="cat-img"><img src="assets/img/kitchen-wood-island.webp" alt="מטבח עץ חמים עם אי ומשטח לבן וכיסאות עץ" loading="lazy" width="1600" height="1067"></div>
-          <div class="cat-body">
-            <h3>מטבחי עץ</h3>
-            <p>אגוז, אלון ופורניר טבעי. מטבח חם שמשתבח עם השנים.</p>
-            <span class="link-arrow">למטבחי עץ</span>
-          </div>
-        </a>
-      </article>
-
-      <article class="cat-card reveal">
-        <a href="#projects" data-filter-link="stone">
-          <div class="cat-img"><img src="assets/img/kitchen-oak-island.webp" alt="מטבח מעץ אלון עם אי גדול, משטח אבן בהיר וכיסאות בר" loading="lazy" width="1600" height="1067"></div>
-          <div class="cat-body">
-            <h3>איים, אבן ופרטים</h3>
-            <p>אי מטבח, משטחי אבן וחיפויי שיש, ופתרונות לחללים לא שגרתיים.</p>
-            <span class="link-arrow">לאיים ופרטי אבן</span>
-          </div>
-        </a>
-      </article>
-    </div>
+    <p class="statement-text reveal"><span>מהשרטוט הראשון</span> <span>ועד הידית האחרונה.</span></p>
   </div>
 </section>
 
-<!-- ============ GALLERY ============ -->
-<section class="section gallery-section" id="projects" aria-labelledby="galTitle">
+<!-- ============ PROJECTS ============ -->
+<section class="section projects" id="projects" aria-labelledby="galTitle">
   <div class="wrap">
     <header class="section-head section-head-split reveal">
       <div>
-        <p class="eyebrow">המטבחים שלנו</p>
+        <p class="label"><span class="label-num">01</span>פרויקטים</p>
         <h2 id="galTitle" class="section-title">כל פרויקט מתחיל ברעיון</h2>
       </div>
       <div class="filters" role="group" aria-label="סינון פרויקטים">
@@ -241,12 +160,10 @@
       </div>
     </header>
 
-    <!-- Gallery items are loaded from the backend (GET /api/projects); see components/gallery.js -->
+    <!-- Gallery items are loaded from the API, or from config/projects.fallback.js; see components/gallery.js -->
     <div class="gallery" id="gallery"></div>
-
-    <div class="gallery-cta reveal">
-      <p>רוצים לנסות שילובים משלכם?</p>
-      <a class="btn btn-solid" href="#design" data-track="cta_click" data-track-label="gallery_designer">עצבו את המטבח שלכם</a>
+    <div class="gallery-more">
+      <button type="button" class="text-btn" id="galleryMore" hidden>לכל הפרויקטים</button>
     </div>
     <p class="gallery-note">התמונות המוצגות כרגע הן תמונות השראה זמניות ויוחלפו בצילומי פרויקטים של KOVO.</p>
   </div>
@@ -256,9 +173,9 @@
 <section class="section designer" id="design" aria-labelledby="designTitle">
   <div class="wrap">
     <header class="section-head reveal">
-      <p class="eyebrow">עצב את המטבח שלך</p>
+      <p class="label"><span class="label-num">02</span>עיצוב מטבח</p>
       <h2 id="designTitle" class="section-title">בחרו צבעים וחומרים, וראו את המטבח משתנה</h2>
-      <p class="section-intro">שנו את הארונות, המשטח, הידיות והחיפוי, או התחילו מאחד הסגנונות. כשמוצא חן בעיניכם, שלחו לנו את השילוב בוואטסאפ.</p>
+      <p class="section-intro">התחילו מסגנון מוכן או שנו כל אזור בעצמכם. כשהשילוב מוצא חן בעיניכם, שלחו אותו אלינו בוואטסאפ.</p>
     </header>
 
     <div class="designer-layout">
@@ -268,17 +185,12 @@
           <canvas class="stage-canvas is-front" role="img" aria-label="הדמיית המטבח"></canvas>
           <canvas class="stage-canvas" role="img" aria-label="הדמיית המטבח"></canvas>
           <div class="stage-loading" role="status"><span class="stage-spinner" aria-hidden="true"></span><p>טוען את ההדמיה...</p></div>
-          <button type="button" class="stage-compare" data-dz-compare aria-label="החזיקו כדי לראות את התמונה המקורית">לפני / אחרי</button>
+          <button type="button" class="stage-compare" data-dz-compare aria-label="לפני / אחרי – החזיקו כדי לראות את התמונה המקורית">לפני / אחרי</button>
         </div>
         <p class="stage-note">הדמיה דו־ממדית על גבי תמונת השראה, לא הדמיית תלת־ממד. הגוונים על המסך הם להמחשה, ואת החומרים האמיתיים נראה יחד בפגישה.</p>
       </div>
 
       <div class="designer-panel">
-        <ol class="dz-howto">
-          <li>בחרו סגנון מוכן, או אזור במטבח (ארונות, משטח, ידיות, חיפוי).</li>
-          <li>לחצו על צבע או חומר, והתמונה תשתנה.</li>
-          <li>אהבתם? שלחו לנו את השילוב בוואטסאפ.</li>
-        </ol>
         <div class="dz-block">
           <h3 class="dz-heading">סגנון</h3>
           <div class="dz-chips" data-dz-styles></div>
@@ -314,26 +226,20 @@
   </div>
 </section>
 
-<!-- ============ ABOUT ============ -->
+<!-- ============ STORY ============ -->
 <section class="section about" id="about" aria-labelledby="aboutTitle">
   <div class="wrap about-grid">
     <figure class="about-media reveal">
       <img src="assets/img/craft-hands-saw.webp" alt="ידיים מובילות לוח עץ דרך מסור שולחן" loading="lazy" width="900" height="900">
-      <figcaption>אהבה לנגרות</figcaption>
     </figure>
     <div class="about-text reveal">
+      <p class="label"><span class="label-num">03</span>הסטודיו</p>
       <h2 id="aboutTitle" class="section-title">הסיפור שלנו – KOVO</h2>
       <p class="about-lead"><strong>KOVO נולדה מתוך אהבה אמיתית למטבחים, לנגרות וליצירת חללים שהופכים לבית.</strong></p>
       <p>אני אור ביטון, בן 27, יזם ומייסד KOVO. את העסק הקמתי מתוך תשוקה לעולם המטבחים, מתוך רצון ליצור משהו מעבר למטבח יפה – ליצור מקום שבו עיצוב, איכות, מקצועיות ושירות נפגשים.</p>
       <p>אנחנו מאמינים שמטבח הוא הרבה יותר מרהיט. הוא הלב של הבית, המקום שבו נוצרים רגעים, זיכרונות וחוויות. לכן, כל מטבח שאנחנו יוצרים מתחיל בהקשבה, בהבנת הצרכים של הלקוח ובחשיבה על כל פרט, מהעיצוב הראשוני ועד לגימור האחרון.</p>
       <p>ב-KOVO, השירות והאיכות נמצאים בראש סדר העדיפויות שלנו. אנחנו מאמינים ביחס אישי, בליווי לאורך כל הדרך, בעבודה מדויקת ובחומרים שאנחנו עומדים מאחוריהם. עבורנו, כל לקוח וכל פרויקט הם הזדמנות ליצור משהו ייחודי, כזה שמשלב את החלום של הלקוח עם הסטנדרטים והחזון שלנו.</p>
       <p class="about-closing"><strong>KOVO – יוצרים מטבחים עם מחשבה, תשוקה ואהבה לפרטים.</strong></p>
-      <ul class="values">
-        <li><strong>שירות אישי</strong><span>מדברים ישירות איתי, מהשיחה הראשונה ועד אחרי ההתקנה.</span></li>
-        <li><strong>איכות בלי פשרות</strong><span>חומרי גלם טובים ועבודה מדויקת שמחזיקה שנים.</span></li>
-        <li><strong>תכנון מותאם</strong><span>כל מטבח נמדד ומשורטט מחדש לחלל שלו.</span></li>
-        <li><strong>דיוק בפרטים</strong><span>מרווחים אחידים, קווים ישרים, פרזול שנסגר בשקט.</span></li>
-      </ul>
     </div>
   </div>
 </section>
@@ -341,68 +247,20 @@
 <!-- ============ PROCESS ============ -->
 <section class="section process" id="process" aria-labelledby="processTitle">
   <div class="wrap">
-    <header class="section-head reveal">
-      <p class="eyebrow eyebrow-light">תהליך העבודה</p>
-      <h2 id="processTitle" class="section-title">חמישה שלבים, מהשיחה הראשונה ועד ההתקנה</h2>
+    <header class="process-head reveal">
+      <div>
+        <p class="label"><span class="label-num">04</span>תהליך העבודה</p>
+        <h2 id="processTitle" class="section-title">מהרעיון ועד המטבח שלכם.</h2>
+      </div>
+      <p class="process-intro">תהליך מדויק, אישי ומוקפד, שבו כל פרט נבחר ונבנה מתוך מחשבה.</p>
     </header>
     <ol class="steps">
-      <li class="step reveal">
-        <span class="step-num">01</span>
-        <svg class="step-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 12h24v16H18l-6 6v-6H8z"/><path d="M36 18h4v14h-4v5l-5-5h-9"/></svg>
-        <h3>שיחת היכרות</h3>
-        <p>הבנת הצרכים, הרצונות והסגנון שלכם.</p>
-      </li>
-      <li class="step reveal">
-        <span class="step-num">02</span>
-        <svg class="step-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 40h32M8 40V10h32v30M8 22h32M20 10v30"/><path d="M28 30h8"/></svg>
-        <h3>תכנון ועיצוב</h3>
-        <p>בניית פתרון מותאם לחלל, בשרטוט ובהדמיה.</p>
-      </li>
-      <li class="step reveal">
-        <span class="step-num">03</span>
-        <svg class="step-icon" viewBox="0 0 48 48" aria-hidden="true"><rect x="8" y="8" width="14" height="14"/><rect x="26" y="8" width="14" height="14"/><rect x="8" y="26" width="14" height="14"/><circle cx="33" cy="33" r="7"/></svg>
-        <h3>בחירת חומרים</h3>
-        <p>גוונים, חומרי גלם, גימורים ופרזול.</p>
-      </li>
-      <li class="step reveal">
-        <span class="step-num">04</span>
-        <svg class="step-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M6 34h36v6H6z"/><path d="M12 34V22l12-12 12 12v12"/><path d="M20 34v-8h8v8"/></svg>
-        <h3>ייצור</h3>
-        <p>ייצור מדויק של המטבח בבית המלאכה, בבקרת איכות.</p>
-      </li>
-      <li class="step reveal">
-        <span class="step-num">05</span>
-        <svg class="step-icon" viewBox="0 0 48 48" aria-hidden="true"><path d="M10 40V8h28v32"/><path d="M24 8v32M20 22v4M28 22v4"/><path d="M6 40h36"/></svg>
-        <h3>התקנה</h3>
-        <p>התקנה מקצועית, כיוונים אחרונים ומסירה.</p>
-      </li>
+      <li class="step reveal"><span class="step-num" aria-hidden="true">01</span><div class="step-body"><h3>שיחת היכרות</h3><p>נכיר את הצרכים, הרצונות והסגנון שלכם.</p></div></li>
+      <li class="step reveal"><span class="step-num" aria-hidden="true">02</span><div class="step-body"><h3>תכנון ועיצוב</h3><p>נתכנן מטבח מדויק לחלל שלכם, עד הפרט האחרון.</p></div></li>
+      <li class="step reveal"><span class="step-num" aria-hidden="true">03</span><div class="step-body"><h3>בחירת חומרים</h3><p>נבחר יחד חומרים, גוונים, גימורים ופרזול.</p></div></li>
+      <li class="step reveal"><span class="step-num" aria-hidden="true">04</span><div class="step-body"><h3>ייצור</h3><p>המטבח נבנה בקפידה, תוך הקפדה על איכות ודיוק.</p></div></li>
+      <li class="step reveal"><span class="step-num" aria-hidden="true">05</span><div class="step-body"><h3>התקנה</h3><p>התקנה מקצועית, גימור מדויק והשלמת המטבח שלכם.</p></div></li>
     </ol>
-  </div>
-</section>
-
-<!-- ============ INSPIRATION ============ -->
-<section class="section inspiration" aria-labelledby="inspTitle">
-  <div class="wrap">
-    <header class="section-head reveal">
-      <p class="eyebrow">לוח חומרים</p>
-      <h2 id="inspTitle" class="section-title">יש לכם רעיון? בואו נהפוך אותו למציאות</h2>
-      <p class="section-intro">עץ, אבן ומתכת שעובדים יחד. כך נראית שיחה על חומרים בסטודיו.</p>
-    </header>
-
-    <div class="moodboard">
-      <figure class="mood mood-a reveal"><img src="assets/img/crop-oak-grain.webp" alt="סיבי עץ אלון בהיר" loading="lazy"><figcaption>אלון טבעי · שמן מט</figcaption></figure>
-      <figure class="mood mood-b reveal"><img src="assets/img/crop-marble-backsplash.webp" alt="שיש בהיר עם עורקים כהים" loading="lazy"><figcaption>שיש קלקטה · ליטוש משי</figcaption></figure>
-      <figure class="mood mood-c reveal"><img src="assets/img/crop-cabinet-drawers.webp" alt="חזיתות אגוז עם ידיות פליז" loading="lazy"><figcaption>אגוז אמריקאי · ידית פליז</figcaption></figure>
-      <div class="swatches reveal" role="group" aria-label="פלטת גוונים">
-        <div class="swatch sw-cream"><span>שמנת</span></div>
-        <div class="swatch sw-oak"><span>אלון</span></div>
-        <div class="swatch sw-walnut"><span>אגוז</span></div>
-        <div class="swatch sw-bordeaux"><span>בורדו</span></div>
-        <div class="swatch sw-brass"><span>פליז</span></div>
-        <div class="swatch sw-graphite"><span>גרפיט</span></div>
-      </div>
-      <figure class="mood mood-d reveal"><img src="assets/img/crop-walnut-base.webp" alt="ארונות תחתונים מעץ כהה" loading="lazy"><figcaption>פורניר אגוז · 19 מ״מ</figcaption></figure>
-    </div>
   </div>
 </section>
 
@@ -410,7 +268,7 @@
 <section class="section testimonials" aria-labelledby="testTitle">
   <div class="wrap">
     <header class="section-head reveal">
-      <p class="eyebrow">לקוחות</p>
+      <p class="label"><span class="label-num">05</span>לקוחות</p>
       <h2 id="testTitle" class="section-title">מספרים עלינו</h2>
     </header>
     <div class="quotes">
@@ -434,38 +292,16 @@
 <section class="section contact" id="contact" aria-labelledby="contactTitle">
   <div class="wrap contact-grid">
     <div class="contact-info reveal">
-      <p class="eyebrow eyebrow-light">צור קשר</p>
+      <p class="label"><span class="label-num">06</span>צור קשר</p>
       <h2 id="contactTitle" class="section-title">מתחילים לתכנן את הדבר הבא שלכם</h2>
-      <p>ספרו לנו בכמה מילים על המטבח שאתם מחפשים. נחזור אליכם לתיאום שיחת היכרות.</p>
-      <ul class="contact-list">
-        <li>
-          <span class="cl-label">אזור שירות</span>
-          <span>קצרין, רמת הגולן, הגליל העליון והסביבה</span>
-        </li>
-        <li>
-          <span class="cl-label">טלפון</span>
-          <a href="tel:+972549778853" dir="ltr">054-977-8853</a>
-        </li>
-        <li>
-          <span class="cl-label">בית המלאכה</span>
-          <span data-address-text>קצרין, רמת הגולן</span>
-        </li>
+      <p class="contact-lead">ספרו לנו בכמה מילים על המטבח שאתם מחפשים. נחזור אליכם לתיאום שיחת היכרות.</p>
+      <ul class="contact-links">
+        <li><span class="cl-label">טלפון</span><a href="tel:+972549778853" dir="ltr">054-977-8853</a></li>
+        <li><span class="cl-label">וואטסאפ</span><a href="https://wa.me/972555035890" target="_blank" rel="noopener noreferrer" data-whatsapp>שלחו לנו הודעה</a></li>
+        <li><span class="cl-label">אינסטגרם</span><a href="https://www.instagram.com/kovo.kitchen/" target="_blank" rel="noopener noreferrer" data-instagram dir="ltr">@kovo.kitchen</a></li>
+        <li><span class="cl-label">בית המלאכה</span><a href="https://www.google.com/maps/search/?api=1&amp;query=%D7%A7%D7%A6%D7%A8%D7%99%D7%9F" target="_blank" rel="noopener noreferrer" data-maps-link>קצרין, רמת הגולן</a></li>
       </ul>
-      <div class="contact-actions">
-        <a class="btn btn-light" href="tel:+972549778853">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg>
-          התקשרו אלינו
-        </a>
-        <a class="btn btn-ghost-light" href="https://wa.me/972555035890" target="_blank" rel="noopener noreferrer" data-whatsapp>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-whatsapp"></use></svg>
-          וואטסאפ
-        </a>
-        <a class="btn btn-ghost-light" href="https://www.instagram.com/kovo.kitchen/" target="_blank" rel="noopener noreferrer" data-instagram>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"></use></svg>
-          אינסטגרם
-        </a>
-        <a class="btn btn-ghost-light" href="https://www.google.com/maps/search/?api=1&query=%D7%A7%D7%A6%D7%A8%D7%99%D7%9F" target="_blank" rel="noopener noreferrer" data-maps-link>קצרין במפה</a>
-      </div>
+      <p class="contact-area">אזור שירות: קצרין, רמת הגולן, הגליל העליון והסביבה.</p>
     </div>
 
     <form class="contact-form reveal" id="contactForm" name="contact" method="POST" data-netlify="true" netlify-honeypot="website" novalidate>
@@ -515,7 +351,7 @@
 
 <!-- ============ FOOTER ============ -->
 <footer class="site-footer">
-  <div class="wrap footer-grid">
+  <div class="wrap footer-top">
     <div class="footer-brand">
       <a class="brand" href="#top" aria-label="KOVO">
         <svg class="brand-mark" viewBox="0 0 690.667 692.667" aria-hidden="true"><use href="#i-kovo"/></svg>
@@ -523,39 +359,20 @@
       </a>
       <p>מטבחים בהתאמה אישית. תכנון, ייצור והתקנה מקצרין לכל רמת הגולן.</p>
     </div>
-    <nav aria-label="סגנונות מטבח">
-      <h3>מטבחים</h3>
-      <ul>
-        <li><a href="#projects" data-filter-link="modern">מטבחים מודרניים</a></li>
-        <li><a href="#projects" data-filter-link="wood">מטבחי עץ</a></li>
-        <li><a href="#projects" data-filter-link="light">מטבחים בהירים</a></li>
-        <li><a href="#projects" data-filter-link="storage">מזווה ואחסון</a></li>
-        <li><a href="#projects" data-filter-link="stone">איים ואבן</a></li>
-      </ul>
-    </nav>
     <nav aria-label="ניווט באתר">
-      <h3>האתר</h3>
-      <ul>
-        <li><a href="#top">בית</a></li>
-        <li><a href="#projects">הפרויקטים שלנו</a></li>
-        <li><a href="#design">עצב את המטבח</a></li>
+      <ul class="footer-list">
+        <li><a href="#projects">פרויקטים</a></li>
+        <li><a href="#design">עצבו מטבח</a></li>
+        <li><a href="#about">הסיפור</a></li>
         <li><a href="#process">תהליך העבודה</a></li>
-        <li><a href="#about">הסיפור שלנו</a></li>
         <li><a href="#contact">צור קשר</a></li>
       </ul>
     </nav>
-    <div>
-      <h3>יצירת קשר</h3>
-      <ul>
-        <li>קצרין, רמת הגולן</li>
-        <li><a href="tel:+972549778853" dir="ltr">054-977-8853</a></li>
-        <li><a href="#contact">השאירו פרטים</a></li>
-      </ul>
-      <div class="social">
-        <a href="https://www.instagram.com/kovo.kitchen/" target="_blank" rel="noopener noreferrer" aria-label="KOVO באינסטגרם" data-instagram><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-instagram"></use></svg></a>
-        <a href="https://wa.me/972555035890" target="_blank" rel="noopener noreferrer" aria-label="שלחו לנו הודעה בוואטסאפ" data-whatsapp><svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-whatsapp"></use></svg></a>
-      </div>
-    </div>
+    <ul class="footer-list footer-contact" aria-label="יצירת קשר">
+      <li><a href="tel:+972549778853" dir="ltr">054-977-8853</a></li>
+      <li><a href="https://wa.me/972555035890" target="_blank" rel="noopener noreferrer" data-whatsapp>וואטסאפ</a></li>
+      <li><a href="https://www.instagram.com/kovo.kitchen/" target="_blank" rel="noopener noreferrer" data-instagram>אינסטגרם</a></li>
+    </ul>
   </div>
   <div class="wrap footer-bottom">
     <span>© <span id="year">2026</span> KOVO. כל הזכויות שמורות.</span>
@@ -567,11 +384,10 @@
   </div>
 </footer>
 
-<!-- Floating WhatsApp / contact button -->
+<!-- Floating WhatsApp button -->
 <aside aria-label="יצירת קשר מהירה">
-<a class="float-btn" id="floatBtn" href="https://wa.me/972555035890" target="_blank" rel="noopener noreferrer" aria-label="שלחו לנו הודעה בוואטסאפ" data-whatsapp>
+<a class="float-btn" id="floatBtn" href="https://wa.me/972555035890" target="_blank" rel="noopener noreferrer" aria-label="שלחו לנו הודעה בוואטסאפ" data-whatsapp data-track-label="floating">
   <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-whatsapp"></use></svg>
-  <span class="float-label">וואטסאפ</span>
 </a>
 </aside>
 

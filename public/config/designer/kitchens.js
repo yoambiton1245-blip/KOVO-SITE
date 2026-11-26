@@ -11,8 +11,27 @@
  * detailKeep: 0..1, how much fine photo detail survives a material change (1 = all, for door grooves).
  *
  * To add a real KOVO project: add an entry with its photo, width/height and areas.
+ * Only the areas a photo has are offered in the designer (this photo has handle-less fronts, so no "handles").
+ * The first kitchen is the one the designer shows.
  */
 export const KITCHENS = [
+  {
+    id: "walnut-island",
+    title: "מטבח אגוז עם אי",
+    image: "assets/designer/kitchen-walnut-island.webp",
+    width: 1200,
+    height: 800,
+    isInspiration: true,
+    // Masks were made from hand-traced outlines refined by colour (wood / stone / wall), so the
+    // bar stools, faucet, lamp and the objects on the counter are never repainted.
+    areas: {
+      // The photo's walnut grain is strong: a wide light blur and little kept detail stop it ghosting through paint
+      upper: { mask: "assets/designer/masks/walnut-island-upper.png", lightBlur: 34, detailKeep: 0.3 },
+      lower: { mask: "assets/designer/masks/walnut-island-lower.png", lightBlur: 34, detailKeep: 0.3 },
+      counter: { mask: "assets/designer/masks/walnut-island-counter.png", lightBlur: 10, detailKeep: 0.35 },
+      backsplash: { mask: "assets/designer/masks/walnut-island-backsplash.png", lightBlur: 30, detailKeep: 0.15 }
+    }
+  },
   {
     id: "warm-stone",
     title: "מטבח עץ ואבן",

@@ -63,7 +63,8 @@ export function initDesigner({ reduceMotion }) {
   /* ---------- Controls ---------- */
   el.styles.innerHTML = STYLES.map(s => `<button type="button" class="dz-chip" data-style="${s.id}" aria-pressed="false">${s.label}</button>`).join("");
 
-  const catIds = Object.keys(CATEGORIES);
+  // Offer only the areas this photo actually has (e.g. no "handles" on a handle-less kitchen)
+  const catIds = Object.keys(CATEGORIES).filter(c => kitchen.areas[c]);
   el.tabs.innerHTML = catIds.map((c, i) => `
     <button type="button" role="tab" id="dz-tab-${c}" aria-controls="dz-panel-${c}" aria-selected="${i === 0}" tabindex="${i === 0 ? 0 : -1}" class="dz-tab">${CATEGORIES[c].label}</button>`).join("");
 
@@ -136,8 +137,8 @@ export function initDesigner({ reduceMotion }) {
     }
     el.styles.querySelectorAll("[data-style]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.style === styleId)));
     el.undo.disabled = !undoStack.length;
-    el.summary.innerHTML = summarize(state).map(r => `<li><span>${r.category}</span><strong>${r.value}</strong></li>`).join("");
-    el.canvases.forEach(cv => cv.setAttribute("aria-label", "הדמיית המטבח: " + summarize(state).map(r => `${r.category} ${r.value}`).join(", ")));
+    el.summary.innerHTML = summarize(state, catIds).map(r => `<li><span>${r.category}</span><strong>${r.value}</strong></li>`).join("");
+    el.canvases.forEach(cv => cv.setAttribute("aria-label", "הדמיית המטבח: " + summarize(state, catIds).map(r => `${r.category} ${r.value}`).join(", ")));
   };
 
   const commit = (next, nextStyle = null, { record = true } = {}) => {
@@ -204,10 +205,12 @@ export function initDesigner({ reduceMotion }) {
     front = back;
   };
 
-  // Hold to compare with the original photo
+  // Hold to compare with the original photo. On touch screens a swipe that starts on the button
+  // scrolls the page as usual (the browser then cancels the pointer and the photo returns).
   const showOriginal = on => el.frame.classList.toggle("is-comparing", on);
   el.compare.addEventListener("pointerdown", () => showOriginal(true));
   ["pointerup", "pointerleave", "pointercancel"].forEach(ev => el.compare.addEventListener(ev, () => showOriginal(false)));
+  el.compare.addEventListener("contextmenu", e => e.preventDefault()); // long press must not open a menu
   el.compare.addEventListener("keydown", e => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); showOriginal(true); } });
   el.compare.addEventListener("keyup", () => showOriginal(false));
 
@@ -290,7 +293,7 @@ export function initDesigner({ reduceMotion }) {
     const win = window.open("", "_blank");
     let url = null;
     try { url = designUrl(await save()); } catch { /* message goes out without a link */ }
-    const text = buildWhatsappMessage({ state, styleId, kitchenTitle: kitchen.title, designUrl: url });
+    const text = buildWhatsappMessage({ state, styleId, kitchenTitle: kitchen.title, designUrl: url, categories: catIds });
     const wa = `${SITE.whatsappUrl}?text=${encodeURIComponent(text)}`;
     let opened = false;
     if (win) {

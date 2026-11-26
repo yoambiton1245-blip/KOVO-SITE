@@ -10,7 +10,7 @@ import { createLightbox } from "./components/lightbox.js";
 import { initGallery } from "./components/gallery.js";
 import { initContactForm } from "./components/contactForm.js";
 import { initDesigner } from "./components/designer/designer.js";
-import { initAnalytics } from "./services/analytics.js";
+import { keepHashTargetInView } from "./components/hashAnchor.js";
 
 document.documentElement.classList.add("js");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -22,7 +22,7 @@ initReveal(reduceMotion);
 initGallery({ lightbox: createLightbox(), reduceMotion });
 initContactForm();
 initDesigner({ reduceMotion });
-initAnalytics();
+keepHashTargetInView();
 
 const year = document.getElementById("year");
 if (year) year.textContent = new Date().getFullYear();

@@ -1,13 +1,13 @@
 /**
  * "עצב את המטבח שלך" – kitchen designer UI.
- * Renders the controls from the shared catalog, keeps an undo history, saves designs to the API,
+ * Renders the controls from the shared catalog, keeps an undo history, shares designs as links
+ * (the choices travel inside the link: no server storage),
  * exports a PNG snapshot and builds the WhatsApp message.
  */
-import { CATEGORIES, FINISHES, STYLES, DEFAULT_STATE, findOption } from "../../../shared/kitchenCatalog.js";
+import { CATEGORIES, FINISHES, STYLES, DEFAULT_STATE, findOption } from "../../shared/kitchenCatalog.js";
 import { KITCHENS } from "../../config/designer/kitchens.js";
 import { SITE } from "../../config/site.config.js";
-import { api } from "../../services/api.js";
-import { track } from "../../services/analytics.js";
+import { encodeDesign, decodeDesign } from "../../shared/designLink.js";
 import { KitchenRenderer } from "./engine.js";
 import { summarize, buildWhatsappMessage } from "./whatsappMessage.js";
 
@@ -56,7 +56,6 @@ export function initDesigner({ reduceMotion }) {
   let undoStack = [];
   let front = 0;
   let renderToken = 0;
-  let savedId = null; // id of the saved design matching the current state
 
   const setStatus = (msg, kind = "") => { el.status.textContent = msg; el.status.className = "dz-status " + kind; };
 
@@ -147,7 +146,6 @@ export function initDesigner({ reduceMotion }) {
     if (undoStack.length > 50) undoStack.shift();
     state = clone(next);
     styleId = nextStyle;
-    savedId = null;
     storage.set({ state, styleId });
     syncControls();
     scheduleRender();
@@ -162,7 +160,6 @@ export function initDesigner({ reduceMotion }) {
     else if (CATEGORIES[c].hasFinish) next[c][0] = input.value;
     else next[c] = input.value;
     commit(next, null);
-    track("designer_change", { category: c });
   });
 
   el.styles.addEventListener("click", e => {
@@ -171,7 +168,6 @@ export function initDesigner({ reduceMotion }) {
     const s = STYLES.find(x => x.id === b.dataset.style);
     commit(clone(s.state), s.id);
     el.live.textContent = `סגנון ${s.label} הוחל`;
-    track("designer_style", { style: s.id });
   });
 
   el.undo.addEventListener("click", () => {
@@ -184,7 +180,6 @@ export function initDesigner({ reduceMotion }) {
   el.reset.addEventListener("click", () => {
     commit(clone(DEFAULT_STATE), null);
     el.live.textContent = "העיצוב אופס למטבח המקורי";
-    track("designer_reset");
   });
 
   /* ---------- Rendering ---------- */
@@ -215,31 +210,16 @@ export function initDesigner({ reduceMotion }) {
   el.compare.addEventListener("keyup", () => showOriginal(false));
 
   /* ---------- Save / share ---------- */
-  const designUrl = id => `${location.origin}${location.pathname}?design=${encodeURIComponent(id)}#design`;
-
-  const save = async () => {
-    if (savedId) return savedId;
-    const { id } = await api.saveDesign({ kitchenId: kitchen.id, styleId, state });
-    savedId = id;
-    return id;
-  };
+  // The link carries the whole design, so it opens the same kitchen on any device, with nothing stored on a server
+  const designQuery = () => `?d=${encodeDesign(state, styleId)}#design`;
+  const designUrl = () => `${location.origin}${location.pathname}${designQuery()}`;
 
   el.save.addEventListener("click", async () => {
-    el.save.disabled = true;
-    setStatus("שומר...");
-    try {
-      const id = await save();
-      const url = designUrl(id);
-      window.history.replaceState(null, "", `?design=${encodeURIComponent(id)}#design`);
-      let copied = false;
-      try { await navigator.clipboard.writeText(url); copied = true; } catch { /* not allowed */ }
-      setStatus(copied ? "העיצוב נשמר והקישור הועתק." : `העיצוב נשמר. הקישור: ${url}`, "ok");
-      track("designer_save");
-    } catch {
-      setStatus("לא הצלחנו לשמור כרגע. העיצוב נשמר בדפדפן הזה, ואפשר לשלוח אותו בוואטסאפ.", "err");
-    } finally {
-      el.save.disabled = false;
-    }
+    const url = designUrl();
+    window.history.replaceState(null, "", designQuery());
+    let copied = false;
+    try { await navigator.clipboard.writeText(url); copied = true; } catch { /* not allowed */ }
+    setStatus(copied ? "הקישור לעיצוב הועתק. אפשר לפתוח אותו בכל מכשיר." : `הקישור לעיצוב: ${url}`, "ok");
   });
 
   const snapshot = () => new Promise(resolve => {
@@ -272,7 +252,6 @@ export function initDesigner({ reduceMotion }) {
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 5000);
     setStatus("התמונה ירדה למכשיר.", "ok");
-    track("designer_download");
   });
 
   // Native share sheet with the image file (mobile). Hidden where unsupported.
@@ -283,7 +262,6 @@ export function initDesigner({ reduceMotion }) {
     const file = new File([blob], "kovo-my-kitchen.png", { type: "image/png" });
     try {
       await navigator.share({ files: [file], text: "המטבח שעיצבתי באתר KOVO" });
-      track("designer_share_image");
     } catch { /* cancelled */ }
   });
 
@@ -291,9 +269,7 @@ export function initDesigner({ reduceMotion }) {
     e.preventDefault();
     // Open the window first (synchronously) so pop-up blockers allow it, then fill the URL
     const win = window.open("", "_blank");
-    let url = null;
-    try { url = designUrl(await save()); } catch { /* message goes out without a link */ }
-    const text = buildWhatsappMessage({ state, styleId, kitchenTitle: kitchen.title, designUrl: url, categories: catIds });
+    const text = buildWhatsappMessage({ state, styleId, kitchenTitle: kitchen.title, designUrl: designUrl(), categories: catIds });
     const wa = `${SITE.whatsappUrl}?text=${encodeURIComponent(text)}`;
     let opened = false;
     if (win) {
@@ -301,7 +277,6 @@ export function initDesigner({ reduceMotion }) {
       try { win.location.href = wa; opened = true; } catch { try { win.close(); } catch { /* ignore */ } }
     }
     if (!opened && !window.open(wa, "_blank")) location.href = wa;
-    track("designer_send_whatsapp", { saved: url ? "yes" : "no" });
   });
 
   /* ---------- Boot (lazy) ---------- */
@@ -313,10 +288,13 @@ export function initDesigner({ reduceMotion }) {
       root.querySelector(".stage-original").src = kitchen.image;
 
       // Restore: shared link > last session > original photo
-      const sharedId = new URLSearchParams(location.search).get("design");
+      const params = new URLSearchParams(location.search);
       let restored = null;
-      if (sharedId && /^[A-Za-z0-9_-]{6,20}$/.test(sharedId)) {
-        try { const { data } = await api.getDesign(sharedId); restored = data; savedId = sharedId; } catch { setStatus("הקישור לעיצוב לא נמצא. אפשר להתחיל עיצוב חדש.", "err"); }
+      if (params.has("d")) {
+        restored = decodeDesign(params.get("d"));
+        if (!restored) setStatus("הקישור לעיצוב אינו תקין. אפשר להתחיל עיצוב חדש.", "err");
+      } else if (params.has("design")) {
+        setStatus("הקישור לעיצוב כבר לא זמין. אפשר להתחיל עיצוב חדש.", "err"); // links from the old server-stored version
       }
       restored = restored || storage.get();
       if (restored?.state) { state = { ...clone(DEFAULT_STATE), ...restored.state }; styleId = restored.styleId || null; }
@@ -324,8 +302,9 @@ export function initDesigner({ reduceMotion }) {
       await renderNow();
       el.frame.classList.add("is-ready");
       el.loading.hidden = true;
-      // Warm the texture cache in the background
+      // Warm the texture cache and the lighting maps in the background, so the first choice is quick
       renderer.preload(Object.values(CATEGORIES).flatMap(c => c.options.map(o => o.texture).filter(Boolean)));
+      renderer.warmUp();
     } catch (err) {
       el.loading.innerHTML = '<p>לא הצלחנו לטעון את ההדמיה. נסו לרענן את הדף.</p>';
       console.error(err);

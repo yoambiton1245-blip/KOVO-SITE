@@ -1,4 +1,4 @@
-import { CATEGORIES, FINISHES, STYLES, findOption } from "../../../shared/kitchenCatalog.js";
+import { CATEGORIES, FINISHES, STYLES, findOption } from "../../shared/kitchenCatalog.js";
 
 /**
  * Human-readable summary rows for a design state.
@@ -22,7 +22,8 @@ export const styleLabel = styleId => STYLES.find(s => s.id === styleId)?.label;
  * The image itself cannot be attached through a wa.me link, so the message does not claim it.
  */
 export function buildWhatsappMessage({ state, styleId, kitchenTitle, designUrl, categories }) {
-  const lines = ["שלום KOVO 👋", "עיצבתי מטבח באתר ואשמח לשמוע עוד:", ""];
+  // No emoji: WhatsApp's wa.me redirect corrupts 4-byte characters into "�"
+  const lines = ["שלום KOVO,", "עיצבתי מטבח באתר ואשמח לשמוע עוד:", ""];
   const style = styleLabel(styleId);
   if (style) lines.push(`• סגנון: ${style}`);
   summarize(state, categories).forEach(r => lines.push(`• ${r.category}: ${r.value}`));

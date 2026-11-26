@@ -1,7 +1,5 @@
 import { api } from "../services/api.js";
-import { SITE } from "../config/site.config.js";
-import { track } from "../services/analytics.js";
-import { PROJECT_TYPES, LIMITS, PHONE_PATTERN, EMAIL_PATTERN } from "../../shared/constants.js";
+import { PROJECT_TYPES, LIMITS, PHONE_PATTERN, EMAIL_PATTERN } from "../shared/constants.js";
 
 /**
  * Contact form: client-side validation for quick feedback.
@@ -65,17 +63,14 @@ export function initContactForm() {
     btn.disabled = true;
     btn.textContent = "שולח...";
     try {
-      if (SITE.hosting === "netlify") await submitToNetlifyForms(form);
-      else await api.createLead(payload);
+      await api.createLead(payload);
       form.reset();
       status.classList.add("ok");
       status.textContent = "תודה! הפנייה התקבלה, ואור יחזור אליכם בהקדם.";
-      track("form_submit", { type: payload.projectType });
     } catch (err) {
       // Map server-side field errors back onto the form
       Object.entries(err.fields || {}).forEach(([field, msg]) => rules[field] && setError(rules[field][0], msg));
       status.classList.add("err");
-      track("form_error", { status: String(err.status || 0) });
       status.textContent = err.status === 429
         ? "נשלחו כמה פניות ברצף. נסו שוב בעוד כמה דקות, או כתבו לנו בוואטסאפ."
         : err.status === 400
@@ -93,18 +88,3 @@ export function initContactForm() {
   });
 }
 
-/**
- * Netlify Forms: POST the form fields (urlencoded) to the site root. Netlify stores the submission,
- * filters spam (honeypot "website" + Akismet) and emails it to the address set in the Netlify dashboard.
- */
-async function submitToNetlifyForms(form) {
-  const fd = new FormData(form);
-  fd.set("form-name", form.getAttribute("name") || "contact");
-  fd.set("projectType", PROJECT_TYPES[fd.get("projectType")] || fd.get("projectType")); // readable label in the email
-  const res = await fetch("/", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams(fd).toString()
-  });
-  if (!res.ok) { const err = new Error("Netlify form failed"); err.status = res.status; throw err; }
-}

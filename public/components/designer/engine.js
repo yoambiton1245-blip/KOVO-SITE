@@ -10,7 +10,7 @@
  *     lighting and a little of the detail, then blended back through the mask.
  * Changing an area therefore never touches pixels outside its mask.
  */
-import { FINISHES, findOption } from "../../../shared/kitchenCatalog.js";
+import { FINISHES, findOption } from "../../shared/kitchenCatalog.js";
 
 const TEX_BASE = "assets/designer/textures/";
 const TEX_SIZE = 512;
@@ -149,10 +149,27 @@ export class KitchenRenderer {
           }
         }
       }
-      const idx = [];
-      for (let i = 0; i < n; i++) if (mask[i] > 0.003) idx.push(i);
-      this.areas[id] = { mask, light, detail, idx: Uint32Array.from(idx), detailKeep: def.detailKeep ?? 1 };
+      const list = [];
+      for (let i = 0; i < n; i++) if (mask[i] > 0.003) list.push(i);
+      // Compact per-area arrays: only the area's own pixels are kept (far less memory than full-image maps)
+      const idx = Uint32Array.from(list), len = idx.length;
+      const a = {
+        idx, detailKeep: def.detailKeep ?? 1,
+        m: new Float32Array(len), light: new Float32Array(len), detail: new Float32Array(len),
+        lin: new Float32Array(len * 3), xs: new Uint16Array(len), ys: new Uint16Array(len), sheenBase: new Float64Array(len),
+        shade: {},            // finish id -> light^contrast * detail^detailPower (computed once per finish)
+        cacheKey: null, cacheBytes: null // last painted option for this area, reused while it does not change
+      };
+      for (let k = 0; k < len; k++) {
+        const i = idx[k];
+        a.m[k] = mask[i]; a.light[k] = light[i]; a.detail[k] = detail[i];
+        a.lin[k * 3] = this.lin[i * 3]; a.lin[k * 3 + 1] = this.lin[i * 3 + 1]; a.lin[k * 3 + 2] = this.lin[i * 3 + 2];
+        a.xs[k] = i % w; a.ys[k] = (i / w) | 0;
+        a.sheenBase[k] = Math.max(0, light[i] - 1.05);
+      }
+      this.areas[id] = a;
     }
+    this.lin = null; // only the per-area copies are needed from here on
     return this;
   }
 
@@ -214,41 +231,71 @@ export class KitchenRenderer {
   async render(state, categories, ctx) {
     const out = new ImageData(new Uint8ClampedArray(this.original.data), this.w, this.h);
     const o = out.data;
-    const { lin, w } = this;
 
+    // Areas are written in the same order as before, so soft mask edges blend exactly as they did.
+    // Only an area whose option changed is recomputed; the others reuse their last painted pixels.
     for (const [area, raw] of Object.entries(state)) {
       const a = this.areas[area];
       if (!a) continue;
       const [optId, finishId] = Array.isArray(raw) ? raw : [raw, categories[area]?.finish || "satin"];
       const opt = findOption(area, optId);
       if (!opt || opt.original) continue;
-      const fin = FINISHES[finishId] || FINISHES.satin;
-      const [cr, cg, cb] = hexToLin(opt.color);
-      const tex = await this.#texture(opt.texture);
-      const strength = (opt.strength ?? 0) * 1.6;
-      const scale = opt.scale ?? 1;
-      const { mask, light, detail, idx, detailKeep } = a;
-
-      for (let k = 0; k < idx.length; k++) {
-        const i = idx[k];
-        const m = mask[i];
-        let f = 1;
-        if (tex) {
-          const x = i % w, y = (i / w) | 0;
-          const tx = ((x * scale) | 0) & (TEX_SIZE - 1), ty = ((y * scale) | 0) & (TEX_SIZE - 1);
-          f = 1 + tex[ty * TEX_SIZE + tx] * strength;
-        }
-        const li = Math.pow(light[i], fin.contrast);
-        const de = Math.pow(detail[i], fin.detail * detailKeep);
-        const shade = li * de * f;
-        const sheen = fin.sheen * Math.max(0, light[i] - 1.05) * 0.6;
-        const r = cr * shade + sheen, g = cg * shade + sheen, b = cb * shade + sheen;
-        const j = i * 4, q = i * 3;
-        o[j] = enc(lin[q] + (r - lin[q]) * m);
-        o[j + 1] = enc(lin[q + 1] + (g - lin[q + 1]) * m);
-        o[j + 2] = enc(lin[q + 2] + (b - lin[q + 2]) * m);
+      const key = optId + "|" + finishId;
+      if (a.cacheKey !== key) { a.cacheBytes = await this.#paint(a, opt, finishId); a.cacheKey = key; }
+      const bytes = a.cacheBytes, idx = a.idx;
+      for (let k = 0, q = 0; k < idx.length; k++, q += 3) {
+        const j = idx[k] * 4;
+        o[j] = bytes[q]; o[j + 1] = bytes[q + 1]; o[j + 2] = bytes[q + 2];
       }
     }
     ctx.putImageData(out, 0, 0);
+  }
+
+  /**
+   * Prepare the per-finish lighting maps in idle time (one area/finish per idle slot), so even the
+   * first choice the visitor makes only has to paint. Never blocks: each step yields to the browser.
+   */
+  warmUp() {
+    const jobs = Object.values(this.areas).flatMap(a => Object.entries(FINISHES).map(([id, fin]) => [a, id, fin]));
+    const idle = cb => ("requestIdleCallback" in window ? requestIdleCallback(cb, { timeout: 1500 }) : setTimeout(cb, 50));
+    const next = () => { const job = jobs.shift(); if (!job) return; this.#shade(...job); idle(next); };
+    idle(next);
+  }
+
+  /** light^contrast * detail^power for one finish, computed once per area and finish. */
+  #shade(a, finishId, fin) {
+    let s = a.shade[finishId];
+    if (!s) {
+      const p = fin.detail * a.detailKeep, len = a.idx.length;
+      s = a.shade[finishId] = new Float64Array(len);
+      for (let k = 0; k < len; k++) s[k] = Math.pow(a.light[k], fin.contrast) * Math.pow(a.detail[k], p);
+    }
+    return s;
+  }
+
+  /** Paint one area with one material: returns its sRGB bytes (r, g, b per area pixel). */
+  async #paint(a, opt, finishId) {
+    const fin = FINISHES[finishId] || FINISHES.satin;
+    const [cr, cg, cb] = hexToLin(opt.color);
+    const tex = await this.#texture(opt.texture);
+    const strength = (opt.strength ?? 0) * 1.6;
+    const scale = opt.scale ?? 1;
+    const shade = this.#shade(a, finishId, fin);
+    const { idx, m, lin, xs, ys, sheenBase } = a;
+    const bytes = new Uint8ClampedArray(idx.length * 3);
+    for (let k = 0, q = 0; k < idx.length; k++, q += 3) {
+      let f = 1;
+      if (tex) {
+        const tx = ((xs[k] * scale) | 0) & (TEX_SIZE - 1), ty = ((ys[k] * scale) | 0) & (TEX_SIZE - 1);
+        f = 1 + tex[ty * TEX_SIZE + tx] * strength;
+      }
+      const s = shade[k] * f;
+      const sheen = fin.sheen * sheenBase[k] * 0.6;
+      const mk = m[k];
+      bytes[q] = enc(lin[q] + (cr * s + sheen - lin[q]) * mk);
+      bytes[q + 1] = enc(lin[q + 1] + (cg * s + sheen - lin[q + 1]) * mk);
+      bytes[q + 2] = enc(lin[q + 2] + (cb * s + sheen - lin[q + 2]) * mk);
+    }
+    return bytes;
   }
 }

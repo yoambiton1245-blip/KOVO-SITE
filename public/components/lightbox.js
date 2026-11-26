@@ -15,7 +15,7 @@ export function createLightbox() {
     const it = items[pos];
     img.src = it.image;
     img.alt = it.alt;
-    cap.textContent = `${it.title} · ${it.spec}  (${pos + 1}/${items.length})`;
+    cap.textContent = `${it.title} · ${it.spec}${it.inspiration ? " · תמונת השראה" : ""}  (${pos + 1}/${items.length})`;
   };
   const open = (list, index) => {
     items = list;

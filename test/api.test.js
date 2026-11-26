@@ -1,15 +1,11 @@
 /**
  * Tests for the Vercel Functions in api/. Run: npm test
- * Email and Blob storage are replaced by in-memory stand-ins, so nothing is sent or stored.
+ * Email is replaced by an in-memory stand-in, so nothing is sent.
  */
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { setTestTransport } from "../lib/email.js";
-import { setTestStore } from "../lib/designStore.js";
 import * as leads from "../api/leads.js";
-import * as designsIndex from "../api/designs/index.js";
-import * as designsId from "../api/designs/[id].js";
-import { STYLES } from "../shared/kitchenCatalog.js";
 
 const sent = [];
 process.env.SMTP_USER = "sender@example.com";
@@ -19,7 +15,6 @@ process.env.LEAD_EMAIL_TO = "owner@example.com";
 beforeEach(() => {
   sent.length = 0;
   setTestTransport({ sendMail: async m => { sent.push(m); } });
-  setTestStore(new Map());
 });
 
 const post = (url, body, type = "application/json") =>
@@ -83,20 +78,11 @@ test("missing email settings return 503", async () => {
   }
 });
 
-test("design save and load round-trip", async () => {
-  const save = await designsIndex.POST(post("/api/designs", { kitchenId: "warm-stone", styleId: STYLES[0].id, state: STYLES[0].state }));
-  assert.equal(save.status, 201);
-  const { id } = await save.json();
-  assert.match(id, /^[A-Za-z0-9]{10}$/);
-  const load = await designsId.GET(new Request("http://localhost/api/designs/" + id));
-  assert.equal(load.status, 200);
-  const { data } = await load.json();
-  assert.equal(data.id, id);
-  assert.equal(data.kitchenId, "warm-stone");
-});
-
-test("design validation and missing ids", async () => {
-  assert.equal((await designsIndex.POST(post("/api/designs", { kitchenId: "nope", state: {} }))).status, 400);
-  assert.equal((await designsId.GET(new Request("http://localhost/api/designs/abcdefgh12"))).status, 404);
-  assert.equal((await designsId.GET(new Request("http://localhost/api/designs/..%2Fx"))).status, 400);
+test("submissions from another website are refused, same-site ones pass", async () => {
+  const from = origin => new Request("https://kovo-site.vercel.app/api/leads", { method: "POST", headers: { "content-type": "application/json", origin }, body: JSON.stringify(goodLead) });
+  assert.equal((await leads.POST(from("https://evil.example"))).status, 403);
+  assert.equal(sent.length, 0);
+  assert.equal((await leads.POST(from("https://kovo-site.vercel.app"))).status, 201);
+  const crossSite = new Request("https://kovo-site.vercel.app/api/leads", { method: "POST", headers: { "content-type": "application/json", "sec-fetch-site": "cross-site" }, body: JSON.stringify(goodLead) });
+  assert.equal((await leads.POST(crossSite)).status, 403);
 });

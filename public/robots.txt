@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /api/
-Sitemap: https://www.kovo.co.il/sitemap.xml
+Sitemap: https://kovo-site.vercel.app/sitemap.xml

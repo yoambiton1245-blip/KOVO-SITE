@@ -1,9 +1,6 @@
-import { SITE } from "../config/site.config.js";
-import { api } from "../services/api.js";
 import { initReveal } from "./reveal.js";
-import { track } from "../services/analytics.js";
 
-/** Minimal HTML escaping for values coming from the API. */
+/** Minimal HTML escaping for project data. */
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
 /** Allow only images served by this site (relative paths). */
@@ -13,13 +10,23 @@ const safeImage = src => (/^(\/)?assets\/img\/[\w\-./]+\.(webp|jpe?g|png|avif)$/
 const SIZES = new Set(["feature", "wide", "tall", "half", "small"]);
 const sizeClass = size => "g-" + (SIZES.has(size) ? size : "tall");
 
+/** How wide each layout size is on screen, so the browser can pick the right photo file. */
+const SIZES_ATTR = {
+  feature: "(max-width: 1440px) 100vw, 1440px",
+  wide: "(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 820px",
+  tall: "(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 580px",
+  half: "(max-width: 640px) 100vw, 50vw",
+  small: "(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw"
+};
+const srcset = it => (it.small && it.width ? ` srcset="${esc(safeImage(it.small))} 800w, ${esc(safeImage(it.image))} ${Number(it.width)}w" sizes="${SIZES_ATTR[SIZES.has(it.size) ? it.size : "tall"]}"` : "");
+
 /** On "all", show this many first and reveal the rest on request. */
 const INITIAL = 8;
 
 const card = (it, i) => `
   <figure class="g-item ${sizeClass(it.size)} reveal" data-cat="${esc(it.category)}" data-index="${i}">
     <button class="g-btn" type="button">
-      <div class="g-frame"><img src="${esc(safeImage(it.image))}" alt="${esc(it.alt)}" loading="lazy" decoding="async"></div>
+      <div class="g-frame"><img src="${esc(safeImage(it.image))}"${srcset(it)} alt="${esc(it.alt)}" loading="lazy" decoding="async"></div>
       <figcaption class="g-meta"><span class="g-title">${esc(it.title)}</span><span class="g-spec">${esc(it.spec)}</span></figcaption>
       <span class="visually-hidden"> – הגדלת התמונה</span>
     </button>
@@ -70,7 +77,7 @@ export function initGallery({ lightbox, reduceMotion }) {
     setTimeout(run, 250);
   };
 
-  document.querySelectorAll(".filter").forEach(b => b.addEventListener("click", () => { applyFilter(b.dataset.filter); track("gallery_filter", { filter: b.dataset.filter }); }));
+  document.querySelectorAll(".filter").forEach(b => b.addEventListener("click", () => { applyFilter(b.dataset.filter); }));
   document.querySelectorAll("[data-filter-link]").forEach(a => a.addEventListener("click", () => applyFilter(a.dataset.filterLink)));
 
   moreBtn?.addEventListener("click", () => {
@@ -78,7 +85,6 @@ export function initGallery({ lightbox, reduceMotion }) {
     applyFilter(current, true);
     // Move keyboard focus to the first newly shown project
     grid.querySelector(`.g-item[data-index="${visible[INITIAL]}"] .g-btn`)?.focus();
-    track("gallery_more");
   });
 
   grid.addEventListener("click", e => {
@@ -86,19 +92,11 @@ export function initGallery({ lightbox, reduceMotion }) {
     if (!fig) return;
     const list = visible.map(i => items[i]);
     lightbox.open(list, visible.indexOf(+fig.dataset.index));
-    track("gallery_open");
   });
 
   const load = async () => {
-    try {
-      if (SITE.hosting !== "server") throw new Error("no gallery API on static hosting");
-      const { data } = await api.getProjects();
-      items = Array.isArray(data) ? data : [];
-    } catch {
-      // API unavailable (e.g. static hosting without backend): use the bundled fallback list
-      const { FALLBACK_PROJECTS } = await import("../config/projects.fallback.js");
-      items = FALLBACK_PROJECTS;
-    }
+    const { PROJECTS } = await import("../config/projects.js");
+    items = PROJECTS;
     render();
   };
 

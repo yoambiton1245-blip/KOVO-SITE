@@ -8,14 +8,18 @@
 import { validateLead } from "../lib/lead.validator.js";
 import { emailNewLead, isEmailConfigured } from "../lib/email.js";
 import { json, error, readJson, toResponse } from "../lib/httpError.js";
+import { rejectCrossSite } from "../lib/guard.js";
 
+// Abuse protection: cross-site guard + honeypot here; request rate per IP is limited by a
+// Vercel Firewall rate-limit rule on POST /api/leads (configured in the dashboard, see README).
 export async function POST(request) {
   try {
+    rejectCrossSite(request);
     const lead = validateLead(await readJson(request));
     if (lead.isBot) return json(201, { ok: true }); // honeypot filled: pretend success, send nothing
     if (!isEmailConfigured()) {
       console.error("leads: email is not configured (SMTP_USER / SMTP_PASS / LEAD_EMAIL_TO)");
-      return error(503, "unavailable", "Lead email is not configured");
+      return error(503, "unavailable", "Temporarily unavailable"); // no internal details to the client
     }
     try {
       await emailNewLead(lead);

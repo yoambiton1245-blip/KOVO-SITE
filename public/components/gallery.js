@@ -11,9 +11,10 @@ const safeImage = src => (/^(\/)?assets\/img\/[\w\-./]+\.(webp|jpe?g|png|avif)$/
 
 const card = (it, i) => `
   <figure class="g-item ${it.size === "wide" ? "w-wide" : it.size === "half" ? "w-half" : ""} reveal" data-cat="${esc(it.category)}" data-index="${i}">
-    <button class="g-btn" type="button" aria-label="הגדלת התמונה: ${esc(it.title)}">
+    <button class="g-btn" type="button">
       <div class="g-frame"><img src="${esc(safeImage(it.image))}" alt="${esc(it.alt)}" loading="lazy" decoding="async"></div>
       <figcaption class="g-meta"><span class="g-title">${esc(it.title)}</span><span class="g-spec">${esc(it.spec)}</span></figcaption>
+      <span class="visually-hidden"> – הגדלת התמונה</span>
     </button>
   </figure>`;
 

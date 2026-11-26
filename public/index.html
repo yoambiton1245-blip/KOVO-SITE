@@ -138,6 +138,10 @@
   </div>
 
   <a class="scroll-cue" href="#intro" aria-label="גלילה לתוכן"><span></span></a>
+  <button type="button" class="hero-pause" id="heroPause" aria-pressed="false" aria-label="עצירת סרטון הרקע" hidden>
+    <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+    <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+  </button>
 </section>
 
 <!-- ============ INTRO STRIP ============ -->
@@ -389,7 +393,7 @@
       <figure class="mood mood-a reveal"><img src="assets/img/crop-oak-grain.webp" alt="סיבי עץ אלון בהיר" loading="lazy"><figcaption>אלון טבעי · שמן מט</figcaption></figure>
       <figure class="mood mood-b reveal"><img src="assets/img/crop-marble-backsplash.webp" alt="שיש בהיר עם עורקים כהים" loading="lazy"><figcaption>שיש קלקטה · ליטוש משי</figcaption></figure>
       <figure class="mood mood-c reveal"><img src="assets/img/crop-cabinet-drawers.webp" alt="חזיתות אגוז עם ידיות פליז" loading="lazy"><figcaption>אגוז אמריקאי · ידית פליז</figcaption></figure>
-      <div class="swatches reveal" aria-label="פלטת גוונים">
+      <div class="swatches reveal" role="group" aria-label="פלטת גוונים">
         <div class="swatch sw-cream"><span>שמנת</span></div>
         <div class="swatch sw-oak"><span>אלון</span></div>
         <div class="swatch sw-walnut"><span>אגוז</span></div>
@@ -479,7 +483,7 @@
           <span class="field-error" id="fPhoneErr"></span>
         </div>
         <div class="field">
-          <label for="fEmail">כתובת אימייל</label>
+          <label for="fEmail">כתובת אימייל <span class="field-optional">(לא חובה)</span></label>
           <input id="fEmail" name="email" type="email" autocomplete="email" dir="ltr">
           <span class="field-error" id="fEmailErr"></span>
         </div>
@@ -497,11 +501,12 @@
         <span class="field-error" id="fTypeErr"></span>
       </div>
       <div class="field">
-        <label for="fMsg">הודעה</label>
+        <label for="fMsg">הודעה <span class="field-optional">(לא חובה)</span></label>
         <textarea id="fMsg" name="message" rows="4" placeholder="גודל החלל, לוח זמנים, השראות..."></textarea>
       </div>
       <button class="btn btn-solid btn-block" type="submit">שליחת פנייה</button>
       <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+      <p class="form-privacy">הפרטים נשלחים ל־KOVO במייל ומשמשים רק כדי לחזור אליכם בנוגע לפנייה. מסירת הפרטים היא מרצון, אבל בלי שם וטלפון לא נוכל לחזור אליכם. פרטים נוספים ב<a href="privacy.html">מדיניות הפרטיות</a>.</p>
     </form>
   </div>
 </section>
@@ -554,6 +559,10 @@
   </div>
   <div class="wrap footer-bottom">
     <span>© <span id="year">2026</span> KOVO. כל הזכויות שמורות.</span>
+    <nav class="legal-links" aria-label="מידע משפטי ונגישות">
+      <a href="privacy.html">מדיניות פרטיות</a>
+      <a href="accessibility.html">הצהרת נגישות</a>
+    </nav>
     <span>קצרין · רמת הגולן</span>
   </div>
 </footer>

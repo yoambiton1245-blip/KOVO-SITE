@@ -455,7 +455,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 
 /* ---------- Story ---------- */
 .about-grid { display: grid; grid-template-columns: 1fr; gap: clamp(3rem, 2rem + 4vw, 7rem); align-items: start; }
-.about-media img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: var(--sand); }
+.about-media img { width: 100%; height: auto; aspect-ratio: 4 / 5; object-fit: cover; background: var(--sand); }
 .about-text { min-width: 0; max-width: 38rem; }
 .about-text > p { color: var(--ink-soft); margin-top: 1.4rem; }
 .about-text .section-title { margin-bottom: 2.5rem; }
